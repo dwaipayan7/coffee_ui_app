@@ -34,7 +34,7 @@ class DisplayImage extends StatelessWidget {
                     children: [
                       Positioned(
                         bottom: -60,
-                        width: constrain.maxWidth * 0.9,
+                        width: constrain.maxWidth * 0.7,
                         height: constrain.maxWidth * 1.4,
                         child: Image.asset(
                           'images/${product.image}',
