@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:coffee_ui_app/models/product_model.dart';
 import 'package:coffee_ui_app/widgets/background.dart';
 import 'package:coffee_ui_app/widgets/category_items.dart';
+import 'package:coffee_ui_app/widgets/display_image.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/colors.dart';
@@ -14,9 +17,17 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int currentCategory = 0;
+  int currentProduct = 0;
+  PageController? controller;
+  double viewPoint = 0.5;
+  double? pageOffSet = 1;
 
   @override
   Widget build(BuildContext context) {
+    List<Product> dataProducts = products
+        .where((element) => element.category == categories[currentCategory])
+        .toList();
+
     return Scaffold(
       appBar: appBar(),
       body: Stack(
@@ -53,7 +64,6 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-
           Positioned(
             top: 125,
             child: ClipPath(
@@ -64,33 +74,101 @@ class _HomePageState extends State<HomePage> {
                 color: firstColor,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: List.generate(categories.length,
-                          (index) {
-                    int decrease = 0;
-                    int max = 1;
-                    int bottomPadding = 1;
+                  children: List.generate(
+                    categories.length,
+                    (index) {
+                      int decrease = 0;
+                      int max = 1;
+                      int bottomPadding = 1;
 
-                    for(var i = 0; i<categories.length; i++){
-                      bottomPadding = index > max ? index - decrease++ : index;
-                    }
+                      for (var i = 0; i < categories.length; i++) {
+                        bottomPadding =
+                            index > max ? index - decrease++ : index;
+                      }
 
-                    return GestureDetector(
-                      onTap: (){},
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                          top: 10,
-                          bottom: bottomPadding.abs() * 75,
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            currentCategory = index;
+                          });
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                            top: 10,
+                            bottom: bottomPadding.abs() * 75,
+                          ),
+                          child: CategoryItems(category: categories[index]),
                         ),
-                        child: CategoryItems(category: categories[index]),
-                      ),
-                    );
-
-                  },),
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
-          )
+          ),
+          Positioned(
+            bottom: 0,
+            child: ClipPath(
+              clipper: Clip(),
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.58,
+                width: MediaQuery.of(context).size.width,
+                color: secondColor,
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            child: Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                ClipPath(
+                  clipper: Clip(),
+                  child: Container(
+                    color: Colors.transparent,
+                    height: MediaQuery.of(context).size.height * 0.58,
+                    width: MediaQuery.of(context).size.width,
+                    child: PageView.builder(
+                      itemCount: dataProducts.length, // Critical fix added here
+                      onPageChanged: (value) {
+                        setState(() {
+                          currentProduct = value % dataProducts.length;
+                        });
+                      },
+                      itemBuilder: (context, index) {
+                        double scale = max(
+                          viewPoint,
+                          (1 - (pageOffSet! - index).abs() + viewPoint),
+                        );
 
+                        double angel = 0.0;
+
+                        final items = dataProducts[index]; // Now safe
+
+                        return GestureDetector(
+                          onTap: () {},
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                              top: 200 - (scale / 1.6 * 170),
+                            ),
+                            child: Transform.rotate(
+                              angle: angel * pi,
+                              child: Stack(
+                                alignment: Alignment.topCenter,
+                                children: [
+                                  DisplayImage(product: items),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
