@@ -1,0 +1,2 @@
+C:/Users/Dwaipayan Biswas/StudioProjects/coffee_ui_app/android/app/.cxx/Debug/3g5e1944/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/Dwaipayan Biswas/StudioProjects/coffee_ui_app/android/app/.cxx/Debug/3g5e1944/x86_64/CMakeFiles/rebuild_cache.dir
