@@ -19,13 +19,14 @@ class DisplayImage extends StatelessWidget {
             children: [
               Container(
                 width: constrain.maxWidth,
-                height: constrain.maxWidth*0.9,
-                decoration:
-                const BoxDecoration(color: thirdColor, shape: BoxShape.circle),
+                height: constrain.maxWidth * 0.9,
+                decoration: const BoxDecoration(
+                    color: thirdColor, shape: BoxShape.circle),
               ),
               ClipRRect(
                 borderRadius: BorderRadius.vertical(
-                    bottom: Radius.circular(constrain.maxWidth * 0.45)),
+                  bottom: Radius.circular(constrain.maxWidth * 0.45),
+                ),
                 child: SizedBox(
                   width: constrain.maxWidth * 0.9,
                   height: constrain.maxWidth * 2,
